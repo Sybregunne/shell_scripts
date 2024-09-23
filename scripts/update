@@ -20,9 +20,9 @@ dist-upgrade()
   sudo apt dist-upgrade -y
 }
 
-do-release-upgrade()
+release-upgrade()
 {
   sudo do-release-upgrade
 }
 
-update && upgrade && dist-upgrade &&  autoclean && do-release-upgrade
+update && upgrade && dist-upgrade &&  autoclean && release-upgrade
