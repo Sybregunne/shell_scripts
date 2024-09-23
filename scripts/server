@@ -1,0 +1,50 @@
+#!/bin/sh
+
+nginx()
+{
+  action=$1
+  sudo systemctl $action nginx
+}
+
+mysql()
+{
+  action=$1
+  sudo systemctl $action mysql
+}
+
+help()
+{
+  echo "Usage:"
+  echo "    server <action>"
+  echo "        actions:"
+  echo "            up      - starts nginx and mysql services"
+  echo "            down    - stops nginx and mysql services"
+  echo "            restart - restarts nginx and mysql services"
+  echo "\n"
+  exit
+}
+
+### main ###
+echo "Server v0.0.1b - a shell script by Sybregunne"
+echo "This is a very simple script that starts|stops|restarts|display statuses nginx and mysql"
+echo ""
+
+action=""
+
+case $1 in
+  "up"|"start")
+    action="start";;
+  "down"|"stop")
+    action="stop";;
+  "restart"|"status")
+    action=$1;;
+  *)
+    help;;
+esac
+
+echo "This script uses sudo to turn on/off nginx and mysql"
+echo "You might be asked enter your sudo password to continue..."
+echo "Press Ctrl-c to cancel"
+echo "\n"
+nginx $action
+mysql $action
