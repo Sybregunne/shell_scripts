@@ -15,14 +15,14 @@ autoclean()
   sudo apt autoclean -y
 }
 
-dist-upgrade()
+dist_upgrade()
 {
   sudo apt dist-upgrade -y
 }
 
-release-upgrade()
+do_release_upgrade()
 {
   sudo do-release-upgrade
 }
 
-update && upgrade && dist-upgrade &&  autoclean && release-upgrade
+update && upgrade && dist_upgrade &&  autoclean && do_release_upgrade
