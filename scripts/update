@@ -1,7 +1,28 @@
 #!/bin/sh
 
-sudo apt update
-sudo apt upgrade -y
-sudo apt autoclean -y
+update()
+{
+  sudo apt update
+}
 
-sudo do-release-upgrade
+upgrade()
+{
+  sudo apt upgrade -y
+}
+
+autoclean()
+{
+  sudo apt autoclean -y
+}
+
+dist-upgrade()
+{
+  sudo apt dist-upgrade -y
+}
+
+do-release-upgrade()
+{
+  sudo do-release-upgrade
+}
+
+update && upgrade && dist-upgrade &&  autoclean && do-release-upgrade
