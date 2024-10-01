@@ -32,18 +32,10 @@ do_release_upgrade()
 
 update_all()
 {
-  echo "sudo apt update"
   update 
-  echo "sudo apt upgrade"
   upgrade
-  echo "sudo apt dist-upgrade"
   dist_upgrade 
-  echo "sudo apt autoclean"
-  autoclean 
-  echo "sudo apt autoremove"
-  autoremove 
-  sudo do-release-upgrade
+  autoclean
+  autoremove
   do_release_upgrade
-  echo "Update and clean-up done successfully!"
-  echo ""
 }
