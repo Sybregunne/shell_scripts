@@ -209,8 +209,8 @@ type composer >/dev/null 2>&1 || {
 #### I am a bit satisfied up to this point. ###############################
 
 # nvm, npm, nodejs section
-#curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-#nvm install --lts
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+nvm install --lts
 
 
 # mySQL section
@@ -221,7 +221,7 @@ sudo mysql -e "GRANT ALL PRIVIlEGES on $project_db.* TO  '$project_user';"
 
 # Configure NGINX
 # create function to generate nginx conf file
-generateconf $project_name $project_servername
+
 
 grpwwwdata=$(groups | grep www-data)
 if [ -z "$grpwwwdata" ]; then
@@ -234,13 +234,15 @@ if [[ ! -d "~/projects" ]]; then
 fi
 # check if project directory exists
 # if it doesn't exist
-if [[ ! -d "~/projects/$projcetname" ]]; then
-    mkdir ~/projects/$projectname
+if [[ ! -d "~/projects/$projcet_name" ]]; then
+    mkdir ~/projects/$project_name
 else
-    echo "The project $projectname already exists!"
+    echo "The project $project_name already exists!"
     echo "Please invoke the script again with a different project name"
     exit 1
 fi
+composer create
+generateconf $project_name $project_servername
 
 # Before ending go back to the current dir
 cd $curdir
