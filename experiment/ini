@@ -1,0 +1,66 @@
+iniParse() {
+    # Make word separator Linefeed(\n)
+    OIFS="${IFS}"
+    IFS=$(echo)
+
+    SECTION=_
+    while read LINE; do {
+        IFS="${OIFS}"
+
+        # Skip blank lines
+        TMP="$(echo "${LINE}"|sed -e "s/^[ \t]*//")"
+        if [ 0 -ne ${#TMP} ]; then
+            # Ignore comment lines
+            if [ '#' == "${LINE:0:1}" -o '*' == "${LINE:0:1}" ]; then
+                continue
+            fi # if [ '#' == "${LINE:0:1}" -o '*' == "${LINE:0:1}" ]; then
+
+            # Section label
+            if [ "[" == "${LINE:0:1}" ]; then
+                LINE="${LINE/[/}"
+                LINE="${LINE/]/}"
+                LINE="${LINE/ /_}"
+                SECTION=$(echo "${LINE}")_
+            else
+                LINE="$(echo "${LINE}"|sed -e "s/^[ \t]*//")"
+                LINE="$(echo "${LINE}"|cut -d# -f1)"
+
+                TOKEN="$(echo "${LINE:0}"|cut -d= -f1)"
+                EQOFS=${#TOKEN}
+                TOKEN="$(echo "${TOKEN}"|sed -e "s/[ \t]*//g")"
+
+                VALUE="${LINE:${EQOFS}}"
+                VALUE="$(echo "${VALUE}"|sed -e "s/^[ \t=]*//")"
+                VALUE="$(echo "${VALUE}"|sed -e "s/[ \t]*$//")"
+
+                if [ "${VALUE:0:1}" == '"' ]; then
+                    echo -n "${SECTION}${TOKEN}=${VALUE}"
+                    echo -e "\r"
+                else
+                    echo -n "${SECTION}${TOKEN}="\"${VALUE}\"""
+                    echo -e "\r"
+                fi # if [ "${VALUE:0:1}" == '"' ]; then
+            fi # if [ "[" == "${LINE:0:1}" ]; then 
+        fi # if [ 0 -ne ${#TMP} ]; then
+
+        IFS=$(echo)
+    } done <<< "$1"
+
+    IFS="${OIFS}" # restore original IFS value
+} # iniParse()
+
+# call this function with the INI filespec
+iniReader() {
+    if [ -z "$1" ]; then return 1; fi
+
+    TMPINI="$(<$1)"
+    TMPINI="$(echo "${TMPINI}"|sed -e "s/\r//g")"
+    TMPINI="$(echo "${TMPINI}"|sed -e "s/[ \t]*\[[ \t]*/[/g")"
+    TMPINI="$(echo "${TMPINI}"|sed -e "s/[ \t]*\][ \t]*/]/g")"
+
+    INI=`iniParse "${TMPINI}"`
+    INI="$(echo "${INI}"|sed -e "s/\r/\n/g")"
+    eval "${INI}"
+
+    return 0
+} # iniReader() {

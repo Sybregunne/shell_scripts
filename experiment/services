@@ -1,0 +1,16 @@
+#!/bin/bash
+
+. "./ini"
+
+if iniReader $1 ; then
+    #echo INI read, exit_code $? # exit_code == 0
+    #cat <<< "${INI}"
+    #cat <<< "${Server_Name}"
+    echo $Webserver_server  # 
+    # cat <<< "${Webserver_server}"
+    #cat <<< "${Database_Name}"
+    echo $Webserver_database # 
+    # cat <<< "${Webserver_database}"
+else
+    echo usage: $0 filename.ini
+fi # if iniReader $1 ; then
