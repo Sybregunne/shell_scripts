@@ -75,8 +75,9 @@ check_purge()
     }
 }
 
-show_usage(){
-
+show_usage()
+{
+    echo "Usage: setup.laravel <project name>"
 }
 
 generateconf()
@@ -142,6 +143,12 @@ generateconf()
 }
 
 #### Main ####
+project_name=$1
+project_db=$project_name
+project_user=$project_name
+project_userpass=$project_name
+project_servername="$project_name.internal"
+
 announce 
 confirm # Exit script if user doesn't want to proceed
 
@@ -150,7 +157,7 @@ confirm # Exit script if user doesn't want to proceed
 echo ""
 echo "Updating the your wsl system first."
 
-update_all
+# update_all
 
 echo "System update complete!" && confirm
 # Install php and requirements
@@ -159,7 +166,7 @@ check_install nginx nginx
 check_install mysql mysql-server
 
 # check if apache is installed and purge if it exists
-check_purge apache2 apache
+check_purge apache2 apache2 apache2-*
 
 # install composer
 #cp = $(pwd)
@@ -181,7 +188,7 @@ echo "Download the latest composer.phar and make it executable."
 echo "Then move \"composer.phar\" to \"$(pwd)/composer\""
 confirm
 
-type $binary >/dev/null 2>&1 && || {
+type composer >/dev/null 2>&1 || {
     # download composer-setup.php
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     # verify installer
@@ -199,23 +206,22 @@ type $binary >/dev/null 2>&1 && || {
     fi
 }
 
-cd $cp
 #### I am a bit satisfied up to this point. ###############################
 
 # nvm, npm, nodejs section
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-nvm install --lts
+#curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+#nvm install --lts
 
 
 # mySQL section
 # sudo mysql -e "<query>"
-sudo mysql -e "CREATE DATABASE '$projectdb';"
-sudo mysql -e "CREATE USER '$projectuser' IDENTIFIED by '$projectuserpass';"
-sudo mysql -e "GRANT ALL PRIVIlEGES on $projectdb.* TO  '$projectuser';"
+sudo mysql -e "CREATE DATABASE '$project_db';"
+sudo mysql -e "CREATE USER '$project_user' IDENTIFIED by '$project_userpass';"
+sudo mysql -e "GRANT ALL PRIVIlEGES on $project_db.* TO  '$project_user';"
 
 # Configure NGINX
 # create function to generate nginx conf file
-generateconf $projectname "$projectname.internal"
+generateconf $project_name $project_servername
 
 grpwwwdata=$(groups | grep www-data)
 if [ -z "$grpwwwdata" ]; then
