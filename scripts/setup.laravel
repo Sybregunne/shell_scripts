@@ -69,7 +69,8 @@ check_install()
 check_purge()
 {
     binary=$1
-    package=$2
+    shift
+    package=$@
 
     type $binary >/dev/null 2>&1 && { 
         echo "$binary found! Purging $package..."
@@ -168,8 +169,8 @@ check_install nginx nginx
 check_install mysql mysql-server
 
 # check if apache is installed and purge if it exists
-check_purge apache2 apache2 apache2-*
-
+check_purge apache2 apache2 apache2*
+exit
 # install composer
 #cp = $(pwd)
 cd ~
