@@ -37,16 +37,18 @@ announce()
     echo "Most commands here uses sudo. You might need to enter your password at least once."
 }
 
-confirm()
+confirm() 
 {
-    echo "Do you want to proceed? [y/n]"
+    echo -n "Do you want to proceed? [y/n]? "
     read ans
     case "$ans" in 
         #case 1 
-        "y"|"Y") echo "Proceeding..." ;; 
+        "y"|"Y") 
+            echo "Proceeding..." ;; 
         
         #case 2 
-        "n"|"N") exit ;; 
+        "n"|"N") 
+            exit ;; 
         
         #case 3 
         *) echo "Please enter 'y' or 'n'. " && confirm ;; 
@@ -157,7 +159,7 @@ confirm # Exit script if user doesn't want to proceed
 echo ""
 echo "Updating the your wsl system first."
 
-# update_all
+update_all
 
 echo "System update complete!" && confirm
 # Install php and requirements
@@ -181,14 +183,15 @@ fi
 cd bin
 
 ### Composer setup...
-echo ""
-echo "This will download composer from the official website."
-echo "Verify the installer script. (using sha384)"
-echo "Download the latest composer.phar and make it executable."
-echo "Then move \"composer.phar\" to \"$(pwd)/composer\""
-confirm
-
+# check if composer is installed
 type composer >/dev/null 2>&1 || {
+    # Composer was not found in the system
+    echo ""
+    echo "This will download composer from the official website."
+    echo "Verify the installer script. (using sha384)"
+    echo "Download the latest composer.phar and make it executable."
+    echo "Then move \"composer.phar\" to \"$(pwd)/composer\""
+    confirm
     # download composer-setup.php
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     # verify installer
@@ -204,15 +207,37 @@ type composer >/dev/null 2>&1 || {
         echo "Exiting"
         exit 1
     fi
+} && {
+    # composer was found in the system
+    echo ""
+    echo "Composer was found..."
+    composer --version | grep "Composer"
+    echo "    ...skipping"
 }
+
+echo "Up to this point check if still want to continue!" 
+confirm
 
 #### I am a bit satisfied up to this point. ###############################
 
 # nvm, npm, nodejs section
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
-nvm install --lts
-
-
+nvm_installed=$(command -v nvm)
+if [[ ! "$nvm_installed"=="nvm" ]]; then 
+    echo ""
+    echo "Installing nvm..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+else
+    echo ""
+    echo "nvm already installed, skipping..."
+fi
+type npm >/dev/null 2>&1 || {
+    echo "installing npm..."
+    nvm install --lts
+} && {
+    echo ""
+    echo "npm already installed, skipping..."
+}
+exit
 # mySQL section
 # sudo mysql -e "<query>"
 sudo mysql -e "CREATE DATABASE '$project_db';"
