@@ -1,0 +1,7 @@
+#!/bin/bash
+if [[ "$1" == "" ]]; then echo "Usage: which-pkg <binary>" && exit; fi
+type "$1" >/dev/null 2>&1 && {
+    dpkg -S $(which "$1")
+} || {
+    echo "The binary \"$1\" was not found in the system!!!"
+}
