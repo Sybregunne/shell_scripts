@@ -1,28 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
-update()
-{
-  sudo apt update
-}
+DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
-upgrade()
-{
-  sudo apt upgrade -y
-}
+. "$DIR/lib/update.lib.sh"
 
-autoclean()
-{
-  sudo apt autoclean -y
-}
-
-dist_upgrade()
-{
-  sudo apt dist-upgrade -y
-}
-
-do_release_upgrade()
-{
-  sudo do-release-upgrade
-}
-
-update && upgrade && dist_upgrade &&  autoclean && do_release_upgrade
+update_all
