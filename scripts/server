@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 nginx()
 {
@@ -45,6 +45,6 @@ esac
 echo "This script uses sudo to turn on/off nginx and mysql"
 echo "You might be asked enter your sudo password to continue..."
 echo "Press Ctrl-c to cancel"
-echo "\n"
+echo ""
 nginx $action
 mysql $action
