@@ -14,8 +14,16 @@ checkinst() {
         echo "The script/binary \"$scriptname\" is already installed in $(which $scriptname)"
     fi
 }
-### server ###
-
+linklib() {
+    libdir="$(pwd)/lib"
+    if [[ ! -d ~/bin/lib ]]; then 
+        ln -s "$libdir" ~/bin/lib
+        echo "lib folder linked successfully!"
+    else
+        echo "lib folder already linked"
+    fi
+}
+linklib
 checkinst server
 checkinst update
 checkinst setup.laravel
