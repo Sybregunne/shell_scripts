@@ -5,4 +5,13 @@ if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
 
 . "$DIR/lib/update.lib.sh"
 
-update_all
+update
+upgrade
+dist_upgrade
+autoclean
+autoremove
+
+case $1 in
+    "--release" | "-r")
+        do_release_upgrade;;
+esac
