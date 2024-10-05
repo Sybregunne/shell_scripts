@@ -7,21 +7,18 @@ rlink()
     echo "$temp" >> which.log
     if [ -h "$temp" ]; then
         temp=$(readlink "$temp")
-        rlink "$temp"
+    fi
+    if [ -h "$temp" ]; then
+        temp=$(rlink "$temp")
     fi
     echo -n "$temp"
 }
 
 if [[ "$1" == "" ]]; then echo "Usage: which-pkg <binary>" && exit; fi
 type "$1" >/dev/null 2>&1 && {
-    echo "1"
     tmp=$(which "$1")
-    echo "2"
     tmp=$(rlink "$tmp")
-    echo $tmp
-    echo "3"
     tmp=$(dpkg -S "$tmp")
-    echo "4"
     echo ${tmp%%:*}
 } || {
     echo "The binary \"$1\" was not found in the system!!!"
