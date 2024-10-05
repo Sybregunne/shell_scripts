@@ -23,6 +23,10 @@ linklib() {
         echo "lib folder already linked"
     fi
 }
+if [ ! -d "/home/$USER/bin" ]; then 
+    mkdir "/home/$USER/bin";
+    . "/home/$USER/.bashrc" 
+fi
 linklib
 checkinst server
 checkinst update
