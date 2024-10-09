@@ -5,5 +5,12 @@
 # cd $2
 
 git clone $1
+cp .env.example .env
+# ask if user wants to manually edit .env
+nano .env
+# if not create a function to modify the .env in place using sed?
+php artisan key:generate
+php artisan migrate
+
 composer update
 
