@@ -164,7 +164,7 @@ update_all
 
 echo "System update complete!" && confirm
 # Install php and requirements
-check_install php php php-fpm php-mbstring php-xml php-bcmath
+check_install php php php-fpm php-mbstring php-xml php-bcmath php-curl
 check_install nginx nginx
 check_install mysql mysql-server
 
