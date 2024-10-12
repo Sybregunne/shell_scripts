@@ -3,8 +3,28 @@
 # if $2 create $2 directory
 # mkdir $2
 # cd $2
+create_directory()
+{
+    create_dir="$1"
+    if [[ ! -d "$create_dir" ]]; then
+        mkdir $create_dir
+        cd $create_dir
+    else
+        echo "The directory "$create_dir" already exist. Please use a different directory name."
+        exit 1
+    fi
+}
+if [[ -z "$1"  ]]; then
+    echo "Usage: git.laravel <git_source> [create_dir_name]"
+    exit
+fi
 
-git clone $1
+if [[ ! -z "$2" ]]; then
+    create_directory $2
+    cd $2
+fi
+
+git clone $1 .
 cp .env.example .env
 # ask if user wants to manually edit .env
 nano .env

@@ -32,3 +32,4 @@ checkinst server
 checkinst update
 checkinst setup.laravel
 checkinst which-pkg
+checkinst git.laravel
